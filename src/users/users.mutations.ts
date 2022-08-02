@@ -15,7 +15,7 @@ export default {
     createAccount: async (
       _: any,
       { firstName, lastName, username, email, password }: CreateAccountArgs
-    ): Promise<User | null> => {
+    ): Promise<User | unknown> => {
       try {
         // check if username or email are already on DB.
         const existingUser: User | null = await client.user.findFirst({
@@ -40,8 +40,7 @@ export default {
         });
         return createdUser;
       } catch (error) {
-        console.log(error);
-        return null;
+        return error;
       }
     },
   },

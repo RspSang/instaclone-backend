@@ -10,7 +10,7 @@ export default {
     seeProfile: async (
       _: any,
       { username }: SeeProfileArgs
-    ): Promise<User | null> => {
+    ): Promise<User | unknown> => {
       try {
         const foundUser: User | null = await client.user.findUnique({
           where: { username },
@@ -22,8 +22,7 @@ export default {
 
         return foundUser;
       } catch (error) {
-        console.log("seeProfile error");
-        return null;
+        return error;
       }
     },
   },
