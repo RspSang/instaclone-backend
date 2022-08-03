@@ -6,7 +6,7 @@ import { DocumentNode, GraphQLSchema } from "graphql";
 
 const typeDefsArray: any[] = loadFilesSync(`${__dirname}/**/*.typeDefs.ts`);
 const resolversArray: any[] = loadFilesSync(
-  `${__dirname}/**/*.{queries,mutations}.ts`
+  `${__dirname}/**/*.resolvers.ts`
 );
 
 const mergedTypeDefs: DocumentNode = mergeTypeDefs(typeDefsArray);
