@@ -1,6 +1,7 @@
 import { User } from "@prisma/client";
-import jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
 import client from "../client";
+import { Resolver } from "../types";
 
 declare module "jsonwebtoken" {
   export interface UserIDJwithPayload extends jwt.JwtPayload {
@@ -10,7 +11,7 @@ declare module "jsonwebtoken" {
 
 export const getUser = async (
   token: string | string[] | undefined
-): Promise<User | unknown> => {
+): Promise<User | null> => {
   try {
     if (!token) {
       return null;
@@ -24,7 +25,18 @@ export const getUser = async (
     } else {
       return null;
     }
-  } catch (error) {
-    return error;
+  } catch {
+    return null;
   }
 };
+
+export const protectedResolver =
+  (ourResolver: Resolver) => (root, args, context, info) => {
+    if (!context.loggedInUser) {
+      return {
+        ok: false,
+        error: "로그인이 필요한 서비스입니다.",
+      };
+    }
+    return ourResolver(root, args, context, info);
+  };

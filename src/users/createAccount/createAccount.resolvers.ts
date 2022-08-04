@@ -13,9 +13,9 @@ interface CreateAccountArgs {
 export default {
   Mutation: {
     createAccount: async (
-      _: any,
+      _,
       { firstName, lastName, username, email, password }: CreateAccountArgs
-    ): Promise<User | unknown> => {
+    ) => {
       try {
         // check if username or email are already on DB.
         const existingUser: User | null = await client.user.findFirst({
