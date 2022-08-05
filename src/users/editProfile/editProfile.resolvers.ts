@@ -1,6 +1,5 @@
+import { ReadStream, WriteStream, createWriteStream } from "fs";
 import * as bcrypt from "bcrypt";
-import { User } from "@prisma/client";
-import client from "../../client";
 import { protectedResolver } from "../users.utils";
 
 interface EditProfileResultArgs {
@@ -9,6 +8,15 @@ interface EditProfileResultArgs {
   username?: string;
   email?: string;
   password?: string;
+  bio?: string;
+  avatar?: any;
+}
+
+interface AvatarFile {
+  filename: string;
+  mimetype: string;
+  encoding: string;
+  createReadStream: () => ReadStream;
 }
 
 export default {
@@ -22,10 +30,25 @@ export default {
           username,
           email,
           password: newPassword,
+          bio,
+          avatar,
         }: EditProfileResultArgs,
-        { loggedInUser }
+        { loggedInUser, client }
       ) => {
-        let hashedPassword: string | null = null;
+        let avatarUrl: string | undefined = undefined;
+        if (avatar) {
+          console.log(avatar);
+          const { filename, createReadStream } = await avatar.file;
+          const newFilename = `${loggedInUser.id}-${Date.now()}-${filename}`;
+          const readStream: ReadStream = createReadStream();
+          const writeStream: WriteStream = createWriteStream(
+            process.cwd() + "/uploads/" + newFilename
+          );
+          readStream.pipe(writeStream);
+          avatarUrl = `http://localhost:4000/static/${newFilename}`;
+        }
+
+        let hashedPassword: string | undefined = undefined;
         if (newPassword) {
           hashedPassword = await bcrypt.hash(newPassword, 10);
         }
@@ -36,7 +59,9 @@ export default {
             lastName,
             username,
             email,
+            bio,
             ...(hashedPassword && { password: hashedPassword }),
+            ...(avatarUrl && { avatar: avatarUrl }),
           },
         });
         if (updateUser.id) {
