@@ -37,8 +37,7 @@ export default {
       ) => {
         let avatarUrl: string | undefined = undefined;
         if (avatar) {
-          console.log(avatar);
-          const { filename, createReadStream } = await avatar.file;
+          const { filename, createReadStream }: AvatarFile = await avatar.file;
           const newFilename = `${loggedInUser.id}-${Date.now()}-${filename}`;
           const readStream: ReadStream = createReadStream();
           const writeStream: WriteStream = createWriteStream(
