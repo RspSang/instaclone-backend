@@ -1,25 +1,26 @@
 import { User } from "@prisma/client";
 import { protectedResolver } from "../users.utils";
 
-interface FollowUserArgs {
+interface UnfollowUserArgs {
   username: string;
 }
 
 export default {
   Mutation: {
-    followUser: protectedResolver(
-      async (_, { username }: FollowUserArgs, { loggedInUser, client }) => {
+    unfollowUser: protectedResolver(
+      async (_, { username }: UnfollowUserArgs, { loggedInUser, client }) => {
         const ok: User | null = await client.user.findUnique({
           where: { username },
         });
-        if (!ok)
+        if (!ok) {
           return {
             ok: false,
-            error: "팔로우할 유저가 존재하지 않습니다.",
+            error: "유저 언팔로우에 실패하였습니다",
           };
+        }
         await client.user.update({
           where: { id: loggedInUser.id },
-          data: { following: { connect: { username } } },
+          data: { followers: { disconnect: { username } } },
         });
         return {
           ok: true,

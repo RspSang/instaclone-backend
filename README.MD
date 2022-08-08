@@ -9,5 +9,5 @@ Instaclone Backend.
 - [x] Login
 - [x] Edit Profile
 - [x] Follow User
-- [ ] Unfollow User
+- [x] Unfollow User
 - [ ] Change Avatar (Image Upload)
