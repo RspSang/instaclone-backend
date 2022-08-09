@@ -13,7 +13,6 @@ export default {
         { file, caption }: UploadPhotoArgs,
         { loggedInUser, client }
       ) => {
-        // parse caption
         let hashtagObj = null;
         if (caption) {
           const hashtags = caption.match(
@@ -24,7 +23,6 @@ export default {
             create: { hashtag },
           }));
         }
-        // get or create Hashtags
         return client.photo.create({
           data: {
             file,
@@ -42,8 +40,6 @@ export default {
           },
         });
       }
-      // save the photo with the parsed hashtags
-      // add the photo to the hashtags
     ),
   },
 };
