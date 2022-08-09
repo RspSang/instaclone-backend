@@ -1,10 +1,8 @@
-import client from "../client";
-
 export default {
   User: {
-    totalFollowing: ({ id }) =>
+    totalFollowing: ({ id }, _, { client }) =>
       client.user.count({ where: { followers: { some: { id } } } }),
-    totalFollowers: ({ id }) =>
+    totalFollowers: ({ id }, _, { client }) =>
       client.user.count({ where: { following: { some: { id } } } }),
     isMe: ({ id }, _, { loggedInUser }) => {
       if (!loggedInUser) {
@@ -12,7 +10,7 @@ export default {
       }
       return id === loggedInUser.id;
     },
-    isFollowing: async ({ id }, _, { loggedInUser }) => {
+    isFollowing: async ({ id }, _, { client, loggedInUser }) => {
       if (!loggedInUser) {
         return false;
       }
@@ -28,5 +26,9 @@ export default {
       });
       return Boolean(exists);
     },
+    photos: ({ id }, { page }, { client }) =>
+      client.user
+        .findUnique({ where: { id } })
+        .photos({ take: 5, skip: (page - 1) * 5 }),
   },
 };
