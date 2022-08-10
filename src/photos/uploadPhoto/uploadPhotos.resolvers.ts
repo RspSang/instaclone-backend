@@ -1,4 +1,5 @@
 import { protectedResolver } from "../../users/users.utils";
+import { processHashtags } from "../photos.utils";
 
 interface UploadPhotoArgs {
   file: string;
@@ -13,15 +14,9 @@ export default {
         { file, caption }: UploadPhotoArgs,
         { loggedInUser, client }
       ) => {
-        let hashtagObj = null;
+        let hashtagObj = [];
         if (caption) {
-          const hashtags = caption.match(
-            /#[a-zA-Z0-9가-힇ㄱ-ㅎㅏ-ㅣぁ-ゔァ-ヴー々〆〤一-龥\w]+/g
-          );
-          hashtagObj = hashtags.map((hashtag) => ({
-            where: { hashtag },
-            create: { hashtag },
-          }));
+          hashtagObj = processHashtags(caption);
         }
         return client.photo.create({
           data: {
