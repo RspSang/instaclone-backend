@@ -32,5 +32,13 @@ Instaclone Backend.
 ## Comments
 
 - [x] Comment on Photo
-- [x] Edit Comment
 - [x] Delete Comment
+- [x] Edit Comment
+
+## Refactor
+
+- [x] Mutation Responses
+
+## Extras
+
+- [ ] S3 Image Upload
