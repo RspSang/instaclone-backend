@@ -1,6 +1,11 @@
+interface SeePhotoCommentsArgs {
+  id: number;
+  page: number;
+}
+
 export default {
   Query: {
-    seePhotoComments: (_, { id, page }, { client }) =>
+    seePhotoComments: (_, { id, page }: SeePhotoCommentsArgs, { client }) =>
       client.comment.findMany({
         where: { photoId: id },
         orderBy: { createdAt: "asc" },
