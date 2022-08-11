@@ -1,3 +1,4 @@
+import { deleteFromS3 } from "../../shared/shared.utils";
 import { protectedResolver } from "../../users/users.utils";
 
 interface DeletePhotoArgs {
@@ -10,7 +11,7 @@ export default {
       async (_, { id }: DeletePhotoArgs, { client, loggedInUser }) => {
         const photo = await client.photo.findUnique({
           where: { id },
-          select: { userId: true },
+          select: { userId: true, file: true },
         });
         if (!photo) {
           return {
@@ -23,6 +24,7 @@ export default {
             error: "인증되지 않은 유저입니다",
           };
         } else {
+          deleteFromS3(photo.file);
           await client.photo.delete({ where: { id } });
           return {
             ok: true,

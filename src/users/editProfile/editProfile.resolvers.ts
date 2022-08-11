@@ -1,6 +1,7 @@
-import { ReadStream, WriteStream, createWriteStream } from "fs";
+// import { ReadStream, WriteStream, createWriteStream } from "fs";
 import * as bcrypt from "bcrypt";
 import { protectedResolver } from "../users.utils";
+import { uploadToS3 } from "../../shared/shared.utils";
 
 interface EditProfileResultArgs {
   firstName?: string;
@@ -12,12 +13,12 @@ interface EditProfileResultArgs {
   avatar?: any;
 }
 
-interface AvatarFile {
-  filename: string;
-  mimetype: string;
-  encoding: string;
-  createReadStream: () => ReadStream;
-}
+// interface AvatarFile {
+//   filename: string;
+//   mimetype: string;
+//   encoding: string;
+//   createReadStream: () => ReadStream;
+// }
 
 export default {
   Mutation: {
@@ -37,14 +38,15 @@ export default {
       ) => {
         let avatarUrl: string | undefined = undefined;
         if (avatar) {
-          const { filename, createReadStream }: AvatarFile = await avatar.file;
-          const newFilename = `${loggedInUser.id}-${Date.now()}-${filename}`;
-          const readStream: ReadStream = createReadStream();
-          const writeStream: WriteStream = createWriteStream(
-            process.cwd() + "/uploads/" + newFilename
-          );
-          readStream.pipe(writeStream);
-          avatarUrl = `http://localhost:4000/static/${newFilename}`;
+          avatarUrl = await uploadToS3(avatar, loggedInUser.id, "avatars");
+          // const { filename, createReadStream }: AvatarFile = await avatar.file;
+          // const newFilename = `${loggedInUser.id}-${Date.now()}-${filename}`;
+          // const readStream: ReadStream = createReadStream();
+          // const writeStream: WriteStream = createWriteStream(
+          //   process.cwd() + "/uploads/" + newFilename
+          // );
+          // readStream.pipe(writeStream);
+          // avatarUrl = `http://localhost:4000/static/${newFilename}`;
         }
 
         let hashedPassword: string | undefined = undefined;
