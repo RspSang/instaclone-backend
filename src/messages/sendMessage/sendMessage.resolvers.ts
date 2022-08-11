@@ -1,9 +1,19 @@
 import { protectedResolver } from "../../users/users.utils";
 
+interface SendMessageArgs {
+  payload: string;
+  roomId?: number;
+  userId?: number;
+}
+
 export default {
   Mutation: {
     sendMessage: protectedResolver(
-      async (_, { payload, roomId, userId }, { client, loggedInUser }) => {
+      async (
+        _,
+        { payload, roomId, userId }: SendMessageArgs,
+        { client, loggedInUser }
+      ) => {
         let room = null;
         if (userId) {
           const user = await client.user.findUnique({
