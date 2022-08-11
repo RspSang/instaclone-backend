@@ -15,8 +15,24 @@ const startServer = async (): Promise<void> => {
   app.use(graphqlUploadExpress());
   app.use("/static", express.static("uploads"));
   const httpServer: Server = createServer(app);
-  const subscriptionServer: SubscriptionServer = SubscriptionServer.create(
-    { schema, execute, subscribe },
+  const subscriptionServer = SubscriptionServer.create(
+    {
+      schema,
+      execute,
+      subscribe,
+      onConnect: async (connectionParams, webSocket, context) => {
+        console.log("onConnect!");
+        const { token } = connectionParams;
+        if (!token) {
+          throw new Error("토큰이 존재하지 않습니다.");
+        }
+        const loggedInUser = await getUser(token);
+        return { loggedInUser };
+      },
+      onDisconnect(webSocket, context) {
+        console.log("onDisconnect!");
+      },
+    },
     { server: httpServer, path: "/graphql" }
   );
   const apolloServer: ApolloServer<ExpressContext> = new ApolloServer({
