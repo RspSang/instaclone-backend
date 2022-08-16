@@ -22,7 +22,10 @@ export default {
           where: { OR: [{ username }, { email }] },
         });
         if (existingUser) {
-          throw new Error("이미 존재하는 이메일 또는 유저명입니다.");
+          return {
+            ok: false,
+            error: "이미 존재하는 이메일 또는 유저명입니다.",
+          };
         }
 
         // hash password
@@ -40,6 +43,7 @@ export default {
         });
         return { ok: true };
       } catch (error) {
+        console.log(error);
         return { ok: false, error: "계정을 만들수 없습니다." };
       }
     },
