@@ -1,13 +1,13 @@
 import { protectedResolver } from "../../users/users.utils";
 
 interface SeeFeedArgs {
-  page: number;
+  offset: number;
 }
 
 export default {
   Query: {
     seeFeed: protectedResolver(
-      (_, { page }: SeeFeedArgs, { client, loggedInUser }) =>
+      (_, { offset }: SeeFeedArgs, { client, loggedInUser }) =>
         client.photo.findMany({
           where: {
             OR: [
@@ -15,8 +15,8 @@ export default {
               { user: { id: loggedInUser.id } },
             ],
           },
-          take: 5,
-          skip: (page - 1) * 5,
+          take: 2,
+          skip: offset,
           orderBy: { createdAt: "desc" },
         })
     ),
