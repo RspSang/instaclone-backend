@@ -1,19 +1,17 @@
 interface SearchPhotosArgs {
   keyword: string;
-  page: number;
+  offset: number;
 }
 
 export default {
   Query: {
-    searchPhotos: (_, { keyword, page }: SearchPhotosArgs, { client }) =>
+    searchPhotos: (_, { keyword }: SearchPhotosArgs, { client }) =>
       client.photo.findMany({
         where: {
           caption: {
             startsWith: keyword,
           },
         },
-        take: 5,
-        skip: (page - 1) * 5,
       }),
   },
 };
