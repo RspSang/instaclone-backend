@@ -8,7 +8,9 @@
     "migrate": "npx prisma migrate dev",
     "reset": "npx prisma migrate reset",
     "status": "npx prisma migrate status",
-    "studio": "npx prisma studio"
+    "studio": "npx prisma studio",
+    "build": "npx tsc",
+    "start": "node build/server"
   },
   "repository": {
     "type": "git",
