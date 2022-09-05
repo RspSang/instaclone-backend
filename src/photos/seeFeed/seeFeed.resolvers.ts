@@ -15,7 +15,7 @@ export default {
               { user: { id: loggedInUser.id } },
             ],
           },
-          take: 2,
+          take: 3,
           skip: offset,
           orderBy: { createdAt: "desc" },
         })
