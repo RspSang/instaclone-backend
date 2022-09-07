@@ -36,43 +36,44 @@ export default {
         }: EditProfileResultArgs,
         { loggedInUser, client }
       ) => {
-        let avatarUrl: string | undefined = undefined;
-        if (avatar) {
-          avatarUrl = await uploadToS3(avatar, loggedInUser.id, "avatars");
-          // const { filename, createReadStream }: AvatarFile = await avatar.file;
-          // const newFilename = `${loggedInUser.id}-${Date.now()}-${filename}`;
-          // const readStream: ReadStream = createReadStream();
-          // const writeStream: WriteStream = createWriteStream(
-          //   process.cwd() + "/uploads/" + newFilename
-          // );
-          // readStream.pipe(writeStream);
-          // avatarUrl = `http://localhost:4000/static/${newFilename}`;
-        }
+        try {
+          let avatarUrl: string | undefined = undefined;
+          if (avatar) {
+            avatarUrl = await uploadToS3(avatar, loggedInUser.id, "avatars");
+            // const { filename, createReadStream }: AvatarFile = await avatar.file;
+            // const newFilename = `${loggedInUser.id}-${Date.now()}-${filename}`;
+            // const readStream: ReadStream = createReadStream();
+            // const writeStream: WriteStream = createWriteStream(
+            //   process.cwd() + "/uploads/" + newFilename
+            // );
+            // readStream.pipe(writeStream);
+            // avatarUrl = `http://localhost:4000/static/${newFilename}`;
+          }
 
-        let hashedPassword: string | undefined = undefined;
-        if (newPassword) {
-          hashedPassword = await bcrypt.hash(newPassword, 10);
-        }
-        const updateUser = await client.user.update({
-          where: { id: loggedInUser.id },
-          data: {
-            firstName,
-            lastName,
-            username,
-            email,
-            bio,
-            ...(hashedPassword && { password: hashedPassword }),
-            ...(avatarUrl && { avatar: avatarUrl }),
-          },
-        });
-        if (updateUser.id) {
+          let hashedPassword: string | undefined = undefined;
+          if (newPassword) {
+            hashedPassword = await bcrypt.hash(newPassword, 10);
+          }
+          const updateUser = await client.user.update({
+            where: { id: loggedInUser.id },
+            data: {
+              firstName,
+              lastName,
+              username,
+              email,
+              bio,
+              ...(hashedPassword && { password: hashedPassword }),
+              ...(avatarUrl && { avatar: avatarUrl }),
+            },
+          });
+
           return {
             ok: true,
           };
-        } else {
+        } catch (error) {
           return {
             ok: false,
-            error: "프로필을 업데이트할 수 없습니다",
+            error: "プロフィール更新に失敗しました",
           };
         }
       }
