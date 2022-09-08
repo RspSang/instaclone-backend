@@ -2,14 +2,14 @@ import { User } from "@prisma/client";
 
 interface SearchUsersArgs {
   keyword: string;
-  lastId?: number;
+  offset?: number;
 }
 
 export default {
   Query: {
     searchUsers: async (
       _,
-      { keyword, lastId }: SearchUsersArgs,
+      { keyword, offset }: SearchUsersArgs,
       { client }
     ) => {
       const users: User | null = await client.user.findMany({
@@ -18,8 +18,8 @@ export default {
             startsWith: keyword.toLowerCase(),
           },
         },
-        skip: lastId ? 1 : 0,
-        ...(lastId && { lastId: { id: lastId } }),
+        take: 5,
+        skip: offset,
       });
       return users;
     },
