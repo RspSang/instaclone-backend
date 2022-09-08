@@ -1,7 +1,7 @@
 // import { ReadStream, WriteStream, createWriteStream } from "fs";
 import * as bcrypt from "bcrypt";
 import { protectedResolver } from "../users.utils";
-import { uploadToS3 } from "../../shared/shared.utils";
+import { deleteFromS3, uploadToS3 } from "../../shared/shared.utils";
 
 interface EditProfileResultArgs {
   firstName?: string;
@@ -39,6 +39,9 @@ export default {
         try {
           let avatarUrl: string | undefined = undefined;
           if (avatar) {
+            if (loggedInUser.avatar) {
+              await deleteFromS3(loggedInUser.avatar);
+            }
             avatarUrl = await uploadToS3(avatar, loggedInUser.id, "avatars");
             // const { filename, createReadStream }: AvatarFile = await avatar.file;
             // const newFilename = `${loggedInUser.id}-${Date.now()}-${filename}`;
