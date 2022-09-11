@@ -8,13 +8,13 @@ interface HashtagsPhotosArgs {
 const resolvers: Resolvers = {
   Hashtag: {
     photos: async (
-      { hashtag }: Hashtag,
+      { id }: Hashtag,
       { offset }: HashtagsPhotosArgs,
       { client }: Context
     ): Promise<Photo[] | null> => {
       try {
         const foundPhotos: Photo[] = await client.photo.findMany({
-          where: { hashtags: { some: { hashtag } } },
+          where: { hashtags: { some: { id } } },
           skip: offset,
           take: 12,
         });

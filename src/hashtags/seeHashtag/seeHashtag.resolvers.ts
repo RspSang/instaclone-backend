@@ -1,5 +1,6 @@
 interface SeeHashtagArgs {
   hashtag: string;
+  offset: number;
 }
 
 export default {
