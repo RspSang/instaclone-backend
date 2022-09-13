@@ -23,6 +23,7 @@ export default {
           await client.comment.delete({ where: { id } });
           return {
             ok: true,
+            id: comment.id,
           };
         }
       }

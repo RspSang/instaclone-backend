@@ -11,7 +11,7 @@ export default {
       async (_, { id, payload }: EditCommentArgs, { client, loggedInUser }) => {
         const comment = await client.comment.findUnique({
           where: { id },
-          select: { userId: true },
+          select: { id: true, userId: true },
         });
         if (!comment) {
           return {
@@ -25,7 +25,7 @@ export default {
           };
         } else {
           await client.comment.update({ where: { id }, data: { payload } });
-          return { ok: true };
+          return { ok: true, id: comment.id };
         }
       }
     ),
