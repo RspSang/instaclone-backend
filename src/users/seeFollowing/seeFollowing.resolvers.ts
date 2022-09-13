@@ -2,14 +2,14 @@ import { User } from "@prisma/client";
 
 interface SeeFollowingArgs {
   username: string;
-  lastId: number;
+  page: number;
 }
 
 export default {
   Query: {
     seeFollowing: async (
       _,
-      { username, lastId }: SeeFollowingArgs,
+      { username, page }: SeeFollowingArgs,
       { client }
     ) => {
       const ok: User | null = await client.user.findUnique({
@@ -26,8 +26,7 @@ export default {
         .findUnique({ where: { username } })
         .following({
           take: 5,
-          skip: lastId ? 1 : 0,
-          ...(lastId && { lastId: { id: lastId } }),
+          skip: (page - 1) * 5,
         });
       return {
         ok: true,
