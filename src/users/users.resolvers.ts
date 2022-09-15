@@ -10,6 +10,17 @@ export default {
       }
       return id === loggedInUser.id;
     },
+    totalPhotos: async ({ id }, _, { client }) => {
+      try {
+        const countedPhotos: number = await client.photo.count({
+          where: { userId: id },
+        });
+        return countedPhotos;
+      } catch (error) {
+        console.log("totalPhotos error");
+        return 0;
+      }
+    },
     isFollowing: async ({ id }, _, { client, loggedInUser }) => {
       if (!loggedInUser) {
         return false;
