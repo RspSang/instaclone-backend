@@ -11,7 +11,7 @@ export default {
       async (_, { id }: DeletePhotoArgs, { client, loggedInUser }) => {
         const photo = await client.photo.findUnique({
           where: { id },
-          select: { userId: true, file: true },
+          select: { id: true, userId: true, file: true },
         });
         if (!photo) {
           return {
@@ -28,6 +28,7 @@ export default {
           await client.photo.delete({ where: { id } });
           return {
             ok: true,
+            id: photo.id,
           };
         }
       }

@@ -30,7 +30,7 @@ export default {
             },
           },
         });
-        return { ok: true };
+        return { ok: true, id: oldPhoto.id };
       }
     ),
   },
