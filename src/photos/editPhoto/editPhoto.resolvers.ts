@@ -1,3 +1,4 @@
+import { ERROR } from "../../shared/error";
 import { protectedResolver } from "../../users/users.utils";
 import { processHashtags } from "../photos.utils";
 
@@ -17,7 +18,7 @@ export default {
         if (!oldPhoto) {
           return {
             ok: false,
-            error: "사진을 찾을수 없습니다",
+            error: ERROR.noPhoto
           };
         }
         const photo = await client.photo.update({

@@ -1,9 +1,9 @@
 import { Comment } from ".prisma/client";
+import { ERROR } from "../../shared/error";
 import { Context, Resolvers } from "../../types";
 
 interface SeeCommentsArgs {
   photoId: number;
-  offset?: number;
 }
 
 interface SeeCommentsResult {
@@ -16,7 +16,7 @@ const resolvers: Resolvers = {
   Query: {
     seeComments: async (
       _,
-      { photoId, offset }: SeeCommentsArgs,
+      { photoId }: SeeCommentsArgs,
       { client }: Context
     ): Promise<SeeCommentsResult> => {
       try {
@@ -25,15 +25,13 @@ const resolvers: Resolvers = {
         });
 
         if (countedPhoto === 0) {
-          return { ok: false, error: "存在しない写真です。" };
+          return { ok: false, error: ERROR.noPhoto};
         }
 
         const foundComments: Comment[] = await client.comment.findMany({
           where: { photoId },
           include: { user: true },
           orderBy: { createdAt: "desc" },
-          skip: offset,
-          take: 15,
         });
 
         return {
@@ -42,7 +40,7 @@ const resolvers: Resolvers = {
         };
       } catch (error) {
         console.log("seeComments error");
-        return { ok: false, error: "コメント呼び出しに失敗しました。" };
+        return { ok: false, error: ERROR.commentError };
       }
     },
   },

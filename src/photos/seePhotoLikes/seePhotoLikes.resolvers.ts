@@ -1,4 +1,5 @@
 import { User } from "@prisma/client";
+import { ERROR } from "../../shared/error";
 
 interface SeePhotoLikesArgs {
   photoId: number;
@@ -12,7 +13,7 @@ export default {
           where: { id: photoId },
         });
         if (foundPhoto === 0) {
-          return { ok: false, error: "存在しない写真です。" };
+          return { ok: false, error: ERROR.noPhoto };
         }
 
         const foundLikeUsers: User[] = await client.user.findMany({
@@ -27,7 +28,7 @@ export default {
         console.log("seePhotoLikes error");
         return {
           ok: false,
-          error: "「いいね」リスト呼び出しに失敗しました。",
+          error: ERROR.likesError,
         };
       }
     },

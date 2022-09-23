@@ -1,4 +1,5 @@
 import { User } from "@prisma/client";
+import { ERROR } from "../../shared/error";
 
 interface SeeFollowingArgs {
   username: string;
@@ -19,7 +20,7 @@ export default {
       if (!ok) {
         return {
           ok: false,
-          error: "유저를 찾지 못했습니다.",
+          error: ERROR.noUser,
         };
       }
       const following: User | null = await client.user

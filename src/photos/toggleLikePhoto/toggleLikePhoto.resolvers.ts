@@ -1,3 +1,4 @@
+import { ERROR } from "../../shared/error";
 import { protectedResolver } from "../../users/users.utils";
 
 interface ToggleLikeArgs {
@@ -13,7 +14,7 @@ export default {
           if (!photo) {
             return {
               ok: false,
-              error: "사진을 찾을수 없습니다.",
+              error: ERROR.noPhoto
             };
           }
           const likeWhere = {

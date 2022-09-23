@@ -1,5 +1,6 @@
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
+import { ERROR } from "../../shared/error";
 import { Resolvers } from "../../types";
 
 interface LoginArgs {
@@ -15,7 +16,7 @@ const resolvers: Resolvers = {
       if (!user) {
         return {
           ok: false,
-          error: "존재하지않는 유저입니다",
+          error: ERROR.noUser
         };
       }
 
@@ -24,7 +25,7 @@ const resolvers: Resolvers = {
       if (!passwordOk) {
         return {
           ok: false,
-          error: "잘못된 패스워드 입니다",
+          error: ERROR.invaildPassword
         };
       }
       // issue a token and send it to the user

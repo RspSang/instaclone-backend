@@ -1,4 +1,5 @@
 import { User } from "@prisma/client";
+import { ERROR } from "../../shared/error";
 import { protectedResolver } from "../users.utils";
 
 interface FollowUserArgs {
@@ -15,7 +16,7 @@ export default {
         if (!user)
           return {
             ok: false,
-            error: "팔로우할 유저가 존재하지 않습니다.",
+            error: ERROR.noFollowUser,
           };
         await client.user.update({
           where: { id: loggedInUser.id },

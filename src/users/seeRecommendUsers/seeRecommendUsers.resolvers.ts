@@ -1,4 +1,5 @@
 import { User } from ".prisma/client";
+import { ERROR } from "../../shared/error";
 
 const resolvers = {
   Query: {
@@ -16,7 +17,7 @@ const resolvers = {
         console.log("seeRecommendUsers error");
         return {
           ok: false,
-          message: "オススメユーザ呼び出しに失敗しました。",
+          message: ERROR.recommendUserError,
         };
       }
     },

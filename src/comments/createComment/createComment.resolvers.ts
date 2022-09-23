@@ -1,3 +1,4 @@
+import { ERROR } from "../../shared/error";
 import { protectedResolver } from "../../users/users.utils";
 
 interface CreateCommentArgs {
@@ -20,7 +21,7 @@ export default {
         if (!ok) {
           return {
             ok: false,
-            error: "사진을 찾을수 없습니다",
+            error: ERROR.noPhoto,
           };
         }
         const newComment = await client.comment.create({

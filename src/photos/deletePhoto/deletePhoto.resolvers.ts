@@ -1,3 +1,4 @@
+import { ERROR } from "../../shared/error";
 import { deleteFromS3 } from "../../shared/shared.utils";
 import { protectedResolver } from "../../users/users.utils";
 
@@ -16,12 +17,12 @@ export default {
         if (!photo) {
           return {
             ok: false,
-            error: "사진을 찾지 못하였습니다",
+            error: ERROR.noPhoto
           };
         } else if (photo.userId !== loggedInUser.id) {
           return {
             ok: false,
-            error: "인증되지 않은 유저입니다",
+            error: ERROR.invaildUser
           };
         } else {
           deleteFromS3(photo.file);

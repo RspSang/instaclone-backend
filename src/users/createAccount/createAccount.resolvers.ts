@@ -1,6 +1,7 @@
 import * as bcrypt from "bcrypt";
 import { User } from ".prisma/client";
 import client from "../../client";
+import { ERROR } from "../../shared/error";
 
 interface CreateAccountArgs {
   firstName: string;
@@ -24,7 +25,7 @@ export default {
         if (existingUser) {
           return {
             ok: false,
-            error: "이미 존재하는 이메일 또는 유저명입니다.",
+            error: ERROR.existUser,
           };
         }
 
@@ -44,7 +45,7 @@ export default {
         return { ok: true };
       } catch (error) {
         console.log(error);
-        return { ok: false, error: "계정을 만들수 없습니다." };
+        return { ok: false, error: ERROR.createAccountError };
       }
     },
   },

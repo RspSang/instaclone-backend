@@ -1,4 +1,5 @@
 import { User } from ".prisma/client";
+import { ERROR } from "../../shared/error";
 import { Resolvers } from "../../types";
 
 const resolvers: Resolvers = {
@@ -9,7 +10,7 @@ const resolvers: Resolvers = {
           where: { username },
         });
         if (foundUser === null) {
-          throw new Error("존재하지 않는 유저입니다.");
+          throw new Error(ERROR.noUser);
         }
         return foundUser;
       } catch (error) {

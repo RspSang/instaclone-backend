@@ -2,6 +2,7 @@
 import * as bcrypt from "bcrypt";
 import { protectedResolver } from "../users.utils";
 import { deleteFromS3, uploadToS3 } from "../../shared/shared.utils";
+import { ERROR } from "../../shared/error";
 
 interface EditProfileResultArgs {
   firstName?: string;
@@ -76,7 +77,7 @@ export default {
         } catch (error) {
           return {
             ok: false,
-            error: "プロフィール更新に失敗しました",
+            error: ERROR.editProfileError
           };
         }
       }

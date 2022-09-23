@@ -1,3 +1,4 @@
+import { ERROR } from "../../shared/error";
 import { protectedResolver } from "../../users/users.utils";
 
 interface EditCommentArgs {
@@ -16,12 +17,12 @@ export default {
         if (!comment) {
           return {
             ok: false,
-            error: "댓글을 찾을수없습니다",
+            error: ERROR.noComment
           };
         } else if (comment.userId !== loggedInUser.id) {
           return {
             ok: false,
-            error: "인증되지 않은 유저입니다",
+            error: ERROR.invaildUser
           };
         } else {
           await client.comment.update({ where: { id }, data: { payload } });

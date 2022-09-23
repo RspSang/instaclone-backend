@@ -1,3 +1,4 @@
+import { ERROR } from "../../shared/error";
 import { protectedResolver } from "../../users/users.utils";
 
 interface DeleteCommentArgs {
@@ -12,12 +13,12 @@ export default {
         if (!comment) {
           return {
             ok: false,
-            error: "댓글을 찾지 못하였습니다",
+            error: ERROR.noComment,
           };
         } else if (comment.userId !== loggedInUser.id) {
           return {
             ok: false,
-            error: "인증되지 않은 유저입니다",
+            error: ERROR.invaildUser,
           };
         } else {
           await client.comment.delete({ where: { id } });

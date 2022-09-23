@@ -1,22 +1,16 @@
 import { Hashtag, Photo } from ".prisma/client";
 import { Context, Resolvers } from "../types";
 
-interface HashtagsPhotosArgs {
-  offset?: number;
-}
-
 const resolvers: Resolvers = {
   Hashtag: {
     photos: async (
       { id }: Hashtag,
-      { offset }: HashtagsPhotosArgs,
+      _,
       { client }: Context
     ): Promise<Photo[] | null> => {
       try {
         const foundPhotos: Photo[] = await client.photo.findMany({
           where: { hashtags: { some: { id } } },
-          skip: offset,
-          take: 12,
         });
         return foundPhotos;
       } catch (error) {

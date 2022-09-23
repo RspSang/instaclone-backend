@@ -1,4 +1,5 @@
 import { Photo } from ".prisma/client";
+import { ERROR } from "../../shared/error";
 
 const resolvers = {
   Query: {
@@ -13,7 +14,7 @@ const resolvers = {
         console.log("seeRecommendPhotos error");
         return {
           ok: false,
-          error: "オススメ写真呼び出しに失敗しました。",
+          error: ERROR.recommendPhotoError,
         };
       }
     },

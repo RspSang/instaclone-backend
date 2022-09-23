@@ -1,4 +1,5 @@
 import { User } from "@prisma/client";
+import { ERROR } from "../../shared/error";
 import { protectedResolver } from "../users.utils";
 
 interface UnfollowUserArgs {
@@ -16,7 +17,7 @@ export default {
           if (!user) {
             return {
               ok: false,
-              error: "유저 언팔로우에 실패하였습니다",
+              error: ERROR.noUser,
             };
           }
           await client.user.update({
