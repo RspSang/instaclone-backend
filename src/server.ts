@@ -6,6 +6,7 @@ import { createServer, Server } from "http";
 import { execute, subscribe } from "graphql";
 import { SubscriptionServer } from "subscriptions-transport-ws";
 import { getUser } from "./users/users.utils";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import client from "./client";
 import schema from "./schema";
 
@@ -44,6 +45,7 @@ const startServer = async (): Promise<void> => {
       };
     },
     plugins: [
+      ApolloServerPluginLandingPageGraphQLPlayground,
       {
         async serverWillStart() {
           return {
