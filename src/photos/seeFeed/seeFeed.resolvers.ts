@@ -10,10 +10,7 @@ export default {
       (_, { offset }: SeeFeedArgs, { client, loggedInUser }) =>
         client.photo.findMany({
           where: {
-            OR: [
-              { user: { followers: { some: { id: loggedInUser.id } } } },
-              { user: { id: loggedInUser.id } },
-            ],
+            user: { followers: { some: { id: loggedInUser.id } } },
           },
           take: 3,
           skip: offset,
