@@ -10,7 +10,7 @@ export default {
       const hashtags: Hashtag | null = await client.Hashtag.findMany({
         where: {
           hashtag: {
-            startsWith: keyword.toLowerCase(),
+            startsWith: keyword,
           },
         },
       });
